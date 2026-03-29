@@ -8,7 +8,6 @@ const {
 
 router.use(verifyToken);
 
-// Admin & Admin Head bisa melihat status semua driver
 router.get(
   "/status",
   authorizeRoles("admin head", "admin"),
