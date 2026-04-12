@@ -4,12 +4,12 @@ const Task = require("../models/taskModel");
 const createTask = async (req, res) => {
   try {
     const { title, description } = req.body;
-    const adminHeadId = req.user.id;
+    const creatorId = req.user.id;
 
     if (!title)
       return res.status(400).json({ message: "Judul tugas wajib diisi" });
 
-    const result = await Task.createTask(title, description, adminHeadId);
+    const result = await Task.createTask(title, description, creatorId);
     res
       .status(201)
       .json({ message: "Tugas berhasil dibuat", taskId: result.insertId });

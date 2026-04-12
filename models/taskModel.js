@@ -7,10 +7,10 @@ const getAllTasks = async () => {
 };
 
 // admin head
-const createTask = async (title, description, adminHeadId) => {
+const createTask = async (title, description, creatorId) => {
   const [result] = await db.execute(
-    "INSERT INTO delivery_tasks (title, description, created_by_admin_id) VALUES (?, ?, ?)",
-    [title, description, adminHeadId],
+    "INSERT INTO delivery_tasks (title, description, created_by_admin_head_id) VALUES (?, ?, ?)",
+    [title, description, creatorId],
   );
   return result;
 };
@@ -63,6 +63,14 @@ const updateTaskStatusWithNote = async (taskId, driverId, status, note) => {
   return result;
 };
 
+const updateGoodsStatus = async (taskId, status) => {
+  const [result] = await db.execute(
+    "UPDATE delivery_tasks SET goods_status = ? WHERE id = ?",
+    [status, taskId],
+  );
+  return result;
+};
+
 module.exports = {
   createTask,
   getAllTasks,
@@ -71,4 +79,5 @@ module.exports = {
   updateTaskStatus,
   assignMultipleTasks,
   updateTaskStatusWithNote,
+  updateGoodsStatus,
 };
