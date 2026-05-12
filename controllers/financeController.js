@@ -1,4 +1,5 @@
 const Expense = require("../models/expenseModel");
+const Payroll = require("../models/payrollModel");
 
 // Admin mengajukan dana
 const requestTaskFunds = async (req, res) => {
@@ -44,4 +45,61 @@ const approveOrRejectFunds = async (req, res) => {
   }
 };
 
-module.exports = { requestTaskFunds, viewAllRequests, approveOrRejectFunds };
+// Membuat slip gaji bulanan
+const generatePayroll = async (req, res) => {
+  try {
+    const { userId, baseSalary, bonus, period } = req.body;
+    await Payroll.createPayroll(userId, baseSalary, bonus, period);
+    res
+      .status(201)
+      .json({ message: `Slip gaji untuk periode ${period} berhasil dibuat` });
+  } catch (error) {
+    res.status(500).json({ message: "Error server", error });
+  }
+};
+
+// Melihat daftar gaji
+const viewPayrollList = async (req, res) => {
+  try {
+    const payrolls = await Payroll.getAllPayroll();
+    res.status(200).json({ data: payrolls });
+  } catch (error) {
+    res.status(500).json({ message: "Error server", error });
+  }
+};
+
+// Mencairkan gaji karyawan
+const processSalaryPayment = async (req, res) => {
+  try {
+    const payrollId = req.params.id;
+    const financeId = req.user.id;
+    await Payroll.paySalary(payrollId, financeId);
+    res
+      .status(200)
+      .json({ message: `Gaji ID ${payrollId} berhasil dicairkan (Paid)` });
+  } catch (error) {
+    res.status(500).json({ message: "Error server", error });
+  }
+};
+
+// Melihat Laporan Arus Kas (Cash Flow)
+const viewCashFlow = async (req, res) => {
+  try {
+    const cashFlow = await Payroll.getCashFlow();
+    res
+      .status(200)
+      .json({ message: "Laporan Arus Kas Keluar", data: cashFlow });
+  } catch (error) {
+    res.status(500).json({ message: "Error server", error });
+  }
+};
+
+module.exports = {
+  requestTaskFunds,
+  viewAllRequests,
+  approveOrRejectFunds,
+  generatePayroll,
+  viewPayrollList,
+  processSalaryPayment,
+  viewCashFlow,
+};

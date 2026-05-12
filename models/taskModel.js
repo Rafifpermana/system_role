@@ -71,6 +71,15 @@ const updateGoodsStatus = async (taskId, status) => {
   return result;
 };
 
+// SUPERVISOR
+const overrideTaskStatus = async (taskId, status, note) => {
+  const [result] = await db.execute(
+    "UPDATE delivery_tasks SET status = ?, completion_note = ? WHERE id = ?",
+    [status, note, taskId],
+  );
+  return result;
+};
+
 module.exports = {
   createTask,
   getAllTasks,
@@ -80,4 +89,5 @@ module.exports = {
   assignMultipleTasks,
   updateTaskStatusWithNote,
   updateGoodsStatus,
+  overrideTaskStatus,
 };

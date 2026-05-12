@@ -29,4 +29,28 @@ router.put(
   financeController.approveOrRejectFunds,
 );
 
+// Rute Penggajian (Hanya bisa diakses Finance)
+router.post(
+  "/payroll",
+  authorizeRoles("finance"),
+  financeController.generatePayroll,
+);
+router.get(
+  "/payroll",
+  authorizeRoles("finance"),
+  financeController.viewPayrollList,
+);
+router.put(
+  "/payroll/:id/pay",
+  authorizeRoles("finance"),
+  financeController.processSalaryPayment,
+);
+
+// Rute Laporan Arus Kas
+router.get(
+  "/cash-flow",
+  authorizeRoles("finance", "supervisor", "admin head"),
+  financeController.viewCashFlow,
+);
+
 module.exports = router;
