@@ -1,5 +1,12 @@
 const db = require("../config/db");
 
+const getAllDrivers = async () => {
+  const [rows] = await db.execute(
+    'SELECT id, username FROM users WHERE role = "driver"',
+  );
+  return rows;
+};
+
 const getDriverStatus = async () => {
   const query = `
         SELECT 
@@ -16,12 +23,13 @@ const getDriverStatus = async () => {
 
   return rows.map((driver) => ({
     driver_id: driver.driver_id,
-    usename: driver.username,
+    username: driver.username,
     active_tasks: driver.active_tasks,
     status: driver.active_tasks > 0 ? "Sedang mengantar" : "Tersedia",
   }));
 };
 
 module.exports = {
+  getAllDrivers,
   getDriverStatus,
 };

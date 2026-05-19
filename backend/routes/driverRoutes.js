@@ -14,4 +14,10 @@ router.get(
   driverController.viewDriverStatuses,
 );
 
+router.get(
+    '/', 
+    authorizeRoles('admin', 'admin head'), 
+    driverController.getAllDriversList
+);
+
 module.exports = router;

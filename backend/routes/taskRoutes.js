@@ -16,7 +16,7 @@ router.post(
 
 router.get(
   "/",
-  authorizeRoles("admin head", "admin"),
+  authorizeRoles("admin head", "admin", "supervisor", "driver"),
   taskController.viewAllTasks,
 );
 
